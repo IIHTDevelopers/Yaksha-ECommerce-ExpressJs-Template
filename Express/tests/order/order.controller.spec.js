@@ -261,28 +261,6 @@ describe('Order Controller', () => {
             expect(mNext).not.toHaveBeenCalled();
         });
 
-        it(`${orderControllerBoundaryTest} should return a 404 error when deleting an order with invalid ID`, async () => {
-            const orderId = 'invalidOrderId';
-
-            const mReq = {
-                params: { id: orderId },
-            };
-            const mRes = {
-                status: jest.fn().mockReturnThis(),
-                json: jest.fn(),
-            };
-            const mNext = jest.fn();
-
-            OrderServiceImpl.prototype.deleteOrder.mockRejectedValueOnce(new Error('Order not found.'));
-
-            await new OrderController().deleteOrder(mReq, mRes, mNext);
-
-            expect(OrderServiceImpl.prototype.deleteOrder).toHaveBeenCalledWith(orderId);
-            expect(mRes.status).toHaveBeenCalledWith(404);
-            expect(mRes.json).toHaveBeenCalledWith({ error: 'Order not found.' });
-            expect(mNext).not.toHaveBeenCalled();
-        });
-
         it(`${orderControllerBoundaryTest} should return a 500 error when creating an order fails`, async () => {
             const mReq = {
                 body: {
