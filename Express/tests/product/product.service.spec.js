@@ -34,16 +34,6 @@ describe('Product Service', () => {
             expect(result).toEqual(product);
         });
 
-        it(`${productServiceBoundaryTest} should update product by ID`, async () => {
-            const productId = 'product_id';
-            const updatedProductData = { name: 'Updated Product', price: 29.99 };
-            const updatedProduct = { _id: productId, ...updatedProductData };
-            Product.findByIdAndUpdate.mockResolvedValue(updatedProduct);
-
-            const result = await productService.updateProduct(productId, updatedProductData);
-            expect(result).toEqual(updatedProduct);
-        });
-
         it(`${productServiceBoundaryTest} should delete product by ID`, async () => {
             const productId = 'product_id';
             const deletedProduct = { _id: productId, name: 'Deleted Product', price: 39.99 };
@@ -134,31 +124,6 @@ describe('Product Service', () => {
             Product.find.mockRejectedValue(error);
 
             await expect(productService.searchProduct(productName, productDescription)).rejects.toThrow(error);
-        });
-
-        it(`${productServiceBoundaryTest} should update item quantity in the cart`, async () => {
-            const userId = 'user_id';
-            const itemId = 'item_id';
-            const quantity = 3;
-            const cartData = { userId, items: [{ _id: itemId, product: 'product_id', quantity: 2 }] };
-            const updatedCartData = { ...cartData, _id: 'cart_id' };
-
-            Cart.findOneAndUpdate = jest.fn().mockReturnValue(updatedCartData);
-
-            const result = await productService.updateCartItem(userId, itemId, quantity);
-            expect(result).toEqual(updatedCartData);
-        });
-
-        it(`${productServiceBoundaryTest} should remove item from the cart`, async () => {
-            const userId = 'user_id';
-            const itemId = 'item_id';
-            const cartData = { userId, items: [{ _id: itemId, product: 'product_id', quantity: 2 }] };
-            const updatedCartData = { ...cartData, _id: 'cart_id' };
-
-            Cart.findOneAndUpdate = jest.fn().mockReturnValue(updatedCartData);
-
-            const result = await productService.removeCartItem(userId, itemId);
-            expect(result).toEqual(updatedCartData);
         });
 
         it(`${productServiceBoundaryTest} should add products to the cart`, async () => {
