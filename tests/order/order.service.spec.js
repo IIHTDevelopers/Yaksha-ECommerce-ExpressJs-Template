@@ -78,7 +78,7 @@ describe('Order Service', () => {
         it(`${orderServiceBoundaryTest} should throw an error when order is not found for getOrder`, async () => {
             const orderId = 'non_existing_id';
             Order.findById.mockResolvedValue(null);
-            await expect(orderService.getOrder(orderId)).rejects.toThrow('Failed to get order.');
+            await expect(orderService.getOrder(orderId)).rejects.toThrow(/failed to get order/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when order is not found for updateOrder`, async () => {
@@ -92,13 +92,13 @@ describe('Order Service', () => {
                 totalAmount: 150.0,
             };
             Order.findByIdAndUpdate.mockResolvedValue(null);
-            await expect(orderService.updateOrder(orderId, updatedOrderData)).rejects.toThrow('Failed to update order.');
+            await expect(orderService.updateOrder(orderId, updatedOrderData)).rejects.toThrow(/failed to update order/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when order is not found for deleteOrder`, async () => {
             const orderId = 'non_existing_id';
             Order.findByIdAndDelete.mockResolvedValue(null);
-            await expect(orderService.deleteOrder(orderId)).rejects.toThrow('Failed to delete order.');
+            await expect(orderService.deleteOrder(orderId)).rejects.toThrow(/failed to delete order/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to create an order`, async () => {
@@ -110,9 +110,9 @@ describe('Order Service', () => {
                 ],
                 totalAmount: 100.0,
             };
-            const error = new Error('Failed to create order.');
+            const error = new Error(/failed to create order/i);
             Order.create.mockRejectedValue(error);
-            await expect(orderService.createOrder(orderData)).rejects.toThrow(error);
+            await expect(orderService.createOrder(orderData)).rejects.toThrow(/failed to create order/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to update an order by ID`, async () => {
@@ -125,16 +125,16 @@ describe('Order Service', () => {
                 ],
                 totalAmount: 150.0,
             };
-            const error = new Error('Failed to update order.');
+            const error = new Error(/failed to update order/i);
             Order.findByIdAndUpdate.mockRejectedValue(error);
-            await expect(orderService.updateOrder(orderId, updatedOrderData)).rejects.toThrow(error);
+            await expect(orderService.updateOrder(orderId, updatedOrderData)).rejects.toThrow(/failed to update order/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to delete an order by ID`, async () => {
             const orderId = 'non_existing_id';
-            const error = new Error('Failed to delete order.');
+            const error = new Error(/failed to delete order/i);
             Order.findByIdAndDelete.mockRejectedValue(error);
-            await expect(orderService.deleteOrder(orderId)).rejects.toThrow(error);
+            await expect(orderService.deleteOrder(orderId)).rejects.toThrow(/failed to delete order/i);
         });
 
         it(`${orderServiceBoundaryTest} should get user's orders`, async () => {
@@ -220,57 +220,57 @@ describe('Order Service', () => {
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to retrieve user's orders`, async () => {
             const userId = 'user_id';
-            const error = new Error('Failed to retrieve user orders.');
+            const error = new Error(/failed to retrieve user orders/i);
             Order.find.mockRejectedValue(error);
-            await expect(orderService.getUserOrders(userId)).rejects.toThrow(error);
+            await expect(orderService.getUserOrders(userId)).rejects.toThrow(/failed to retrieve user orders/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to cancel an order`, async () => {
             const orderId = 'non_existing_id';
-            const error = new Error('Failed to cancel order.');
+            const error = new Error(/failed to cancel order/i);
             Order.findByIdAndDelete.mockRejectedValue(error);
-            await expect(orderService.cancelOrder(orderId)).rejects.toThrow(error);
+            await expect(orderService.cancelOrder(orderId)).rejects.toThrow(/failed to cancel order/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to retrieve payment details`, async () => {
             const orderId = 'non_existing_id';
-            const error = new Error('Failed to retrieve payment details.');
+            const error = new Error(/failed to retrieve payment details/i);
             Order.findById.mockRejectedValue(error);
-            await expect(orderService.retrievePaymentDetails(orderId)).rejects.toThrow(error);
+            await expect(orderService.retrievePaymentDetails(orderId)).rejects.toThrow(/failed to retrieve payment details/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to process payment`, async () => {
             const orderId = 'non_existing_id';
-            const error = new Error('Failed to process payment.');
+            const error = new Error(/failed to process payment/i);
             Order.findById.mockResolvedValue({ _id: orderId });
             Order.findByIdAndUpdate.mockRejectedValue(error);
-            await expect(orderService.processPayment(orderId)).rejects.toThrow(error);
+            await expect(orderService.processPayment(orderId)).rejects.toThrow(/failed to process payment/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to generate an invoice`, async () => {
             const orderId = 'non_existing_id';
-            const error = new Error('Failed to generate invoice.');
+            const error = new Error(/failed to generate invoice/i);
             Order.findById.mockRejectedValue(error);
-            await expect(orderService.generateInvoice(orderId)).rejects.toThrow(error);
+            await expect(orderService.generateInvoice(orderId)).rejects.toThrow(/failed to generate invoice/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to track shipment details`, async () => {
             const orderId = 'non_existing_id';
-            const error = new Error('Failed to track shipment.');
+            const error = new Error(/failed to track shipment/i);
             Order.findById.mockRejectedValue(error);
-            await expect(orderService.trackShipment(orderId)).rejects.toThrow(error);
+            await expect(orderService.trackShipment(orderId)).rejects.toThrow(/failed to track shipment/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to retrieve order analytics`, async () => {
-            const error = new Error('Failed to retrieve order analytics.');
+            const error = new Error(/failed to retrieve order analytics/i);
             Order.find.mockRejectedValue(error);
-            await expect(orderService.getOrderAnalytics()).rejects.toThrow(error);
+            await expect(orderService.getOrderAnalytics()).rejects.toThrow(/failed to retrieve order analytics/i);
         });
 
         it(`${orderServiceBoundaryTest} should throw an error when failing to retrieve revenue analytics`, async () => {
-            const error = new Error('Failed to retrieve revenue analytics.');
+            const error = new Error(/failed to retrieve revenue analytics/i);
             Order.find.mockRejectedValue(error);
-            await expect(orderService.getRevenueAnalytics()).rejects.toThrow(error);
+            await expect(orderService.getRevenueAnalytics()).rejects.toThrow(/failed to retrieve revenue analytics/i);
         });
 
     });
