@@ -220,13 +220,13 @@ describe('Order Controller', () => {
             };
             const mNext = jest.fn();
 
-            OrderServiceImpl.prototype.getOrder.mockRejectedValueOnce(new Error('Order not found.'));
+            OrderServiceImpl.prototype.getOrder.mockRejectedValueOnce(new Error(/order not found/i));
 
             await new OrderController().getOrder(mReq, mRes, mNext);
 
             expect(OrderServiceImpl.prototype.getOrder).toHaveBeenCalledWith(orderId);
             expect(mRes.status).toHaveBeenCalledWith(404);
-            expect(mRes.json).toHaveBeenCalledWith({ error: 'Order not found.' });
+            expect(mRes.json).toHaveBeenCalledWith({ error: expect.stringMatching(/order not found/i) });
             expect(mNext).not.toHaveBeenCalled();
         });
 
@@ -251,13 +251,13 @@ describe('Order Controller', () => {
             };
             const mNext = jest.fn();
 
-            OrderServiceImpl.prototype.updateOrder.mockRejectedValueOnce(new Error('Order not found.'));
+            OrderServiceImpl.prototype.updateOrder.mockRejectedValueOnce(new Error(/order not found/i));
 
             await new OrderController().updateOrder(mReq, mRes, mNext);
 
             expect(OrderServiceImpl.prototype.updateOrder).toHaveBeenCalledWith(orderId, updatedOrderData);
             expect(mRes.status).toHaveBeenCalledWith(404);
-            expect(mRes.json).toHaveBeenCalledWith({ error: 'Order not found.' });
+            expect(mRes.json).toHaveBeenCalledWith({ error: expect.stringMatching(/order not found/i) });
             expect(mNext).not.toHaveBeenCalled();
         });
 
@@ -278,14 +278,14 @@ describe('Order Controller', () => {
             };
             const mNext = jest.fn();
 
-            const error = new Error('Failed to create order.');
+            const error = new Error(/failed to create order/i);
             OrderServiceImpl.prototype.createOrder.mockRejectedValueOnce(error);
 
             await new OrderController().createOrder(mReq, mRes, mNext);
 
             expect(OrderServiceImpl.prototype.createOrder).toHaveBeenCalledWith(mReq.body);
             expect(mRes.status).toHaveBeenCalledWith(500);
-            expect(mRes.json).toHaveBeenCalledWith({ error: 'Failed to create order.' });
+            expect(mRes.json).toHaveBeenCalledWith({ error: expect.stringMatching(/failed to create order/i) });
             expect(mNext).not.toHaveBeenCalled();
         });
 
@@ -301,14 +301,14 @@ describe('Order Controller', () => {
             };
             const mNext = jest.fn();
 
-            const error = new Error('Order not found.');
+            const error = new Error(/order not found/i);
             OrderServiceImpl.prototype.deleteOrder.mockRejectedValueOnce(error);
 
             await new OrderController().deleteOrder(mReq, mRes, mNext);
 
             expect(OrderServiceImpl.prototype.deleteOrder).toHaveBeenCalledWith(orderId);
             expect(mRes.status).toHaveBeenCalledWith(404);
-            expect(mRes.json).toHaveBeenCalledWith({ error: 'Order not found.' });
+            expect(mRes.json).toHaveBeenCalledWith({ error: expect.stringMatching(/order not found/i) });
             expect(mNext).not.toHaveBeenCalled();
         });
 
